@@ -36,10 +36,11 @@ const schema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    components: {
-        type: [Map],
-        default: [],
-    },
+    components: [{
+        type: mongoose.Schema.ObjectId,
+        ref:"PortfolioComponent"
+    }],
 }, { timestamps: true, });
 
 module.exports = mongoose.model('Portfolio', schema);
+

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const Configs = require('../Models/Configs');
-const Portfolio = require('../Models/Portfolio');
+const Component = require('../Models/Component');
 
 module.exports = async function configDbConnection() {
     const url = process.env.MONGO_URL;
@@ -12,4 +11,5 @@ module.exports = async function configDbConnection() {
         console.log("Connected To Database");
     });
     
+
 }

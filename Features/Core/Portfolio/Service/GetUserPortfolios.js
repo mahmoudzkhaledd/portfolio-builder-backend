@@ -14,12 +14,12 @@ exports.getUserPortfolios = asyncHandeler(async (req, res, next) => {
 exports.getPortfolio = asyncHandeler(async (req, res, next) => {
     const userModel = res.locals.userModel;
     const portId = req.params.id;
-
+    
     if (portId == null) {
         return res.sendStatus(404);
     }
 
-    const port = await Portfolio.findById(portId);
+    const port = await Portfolio.findById(portId).populate('components');
 
     if (port == null || (userModel == null && !port.online) || (!port.online && userModel != null && userModel.id != port.userId)) {
         return res.sendStatus(404);
