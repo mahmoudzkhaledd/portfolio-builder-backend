@@ -9,7 +9,7 @@ exports.updateUserPortfolio = asyncHandeler(async (req, res, next) => {
         inner: components,
         toDelete: toDelete,
     } = req.body.chosen;
-
+    console.log({toDelete});
     const portId = req.params.id;
 
     if (portId == null) {
@@ -20,11 +20,7 @@ exports.updateUserPortfolio = asyncHandeler(async (req, res, next) => {
         return res.sendStatus(400);
     }
 
-    console.log('===================')
-    console.log(`inner: ${components.length}`)
-    console.log(`current: ${port.components.length}`)
-    console.log(`toDelete: ${toDelete.length}`)
-    console.log('===================')
+    
     if (components.length + port.components.length - toDelete.length > 10) {
         return res.sendStatus(401);
     }
@@ -80,14 +76,19 @@ exports.updateUserPortfolio = asyncHandeler(async (req, res, next) => {
             portfolioId: port._id,
         });
     }
-
-
+    
+    
     for (let idx = 0; idx < port.components.length; idx++) {
-        if (toDelete.includes(port.components[idx])) {
+        
+        if (toDelete.includes(port.components[idx]._id.toString())) {
             port.components.splice(idx, 1);
+            idx--;
         }
     }
+
     port.components.push(...portComps.map(obj => obj._id));
+    
+    
     await port.save(); 
      
     res.status(200).json({
