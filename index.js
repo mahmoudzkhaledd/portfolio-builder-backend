@@ -9,9 +9,9 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 app.use(cors({
-    
     origin: [
-      "https://portfolio-builder-frontend.vercel.app/",
+      "https://portfolio-builder-frontend.vercel.app",
+      "http://localhost:3000"
     ],
     credentials: true,
     exposedHeaders: ["set-cookie"],
