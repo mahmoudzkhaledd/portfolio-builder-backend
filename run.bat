@@ -1,1 +1,1 @@
-nodemon app
+nodemon index
