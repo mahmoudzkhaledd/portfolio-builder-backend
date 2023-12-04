@@ -26,13 +26,14 @@ exports.loginUser = asyncHandeler(async (req, res, next) => {
         "id": user._id,
         "verifiedEmail": user.verifiedEmail,
     };
-    let token = null;
+    let token = null; 
     if (userModel == null) {
         token = await jwt.sign(tokenModel, process.env.ACCESS_TOKEN_KEY);
     }
-    res.cookie('token', `Bearer ${token}`);
+    res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=none; secure`]) 
+    //res.cookie('token', `Bearer ${token}`);
     if (!user.verifiedEmail) {
-        return res.cookie('token', `Bearer ${token}`).status(402).json({
+        return res.status(402).json({
             "msg": "Email Is Not Verified!",
             user,
             token,

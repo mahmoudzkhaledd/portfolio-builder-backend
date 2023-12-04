@@ -17,9 +17,9 @@ exports.verifyEmail = async (req, res, next) => {
     }
     if (userTo.verifiedEmail == true) {
         await EmailVerification.deleteOne({ userTo: userId, });
-        userModel.verifiedEmail = true;
+        userModel.verifiedEmail = true; 
         const token = jwt.sign(userModel, process.env.ACCESS_TOKEN_KEY);
-        res.cookie.set('token', token);
+        res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=none; secure`]) 
         return next(new ApiError('User is Verified !', 405))
     }
     const email = await EmailVerification.findOne({ userTo: userId, });
@@ -48,7 +48,7 @@ exports.verifyEmail = async (req, res, next) => {
 
     await userTo.save();
     const token = jwt.sign(userModel, process.env.ACCESS_TOKEN_KEY);
-    res.cookie.set('token', token);
+    res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=none; secure`])  
     return res.status(200).json({
         "user": userTo,
         appConfigs: configs,
