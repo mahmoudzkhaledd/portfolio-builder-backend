@@ -3,6 +3,7 @@ const User = require('../../../../Models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Configs = require('../../../../Models/Configs');
+const moment = require('moment'); 
 
 exports.loginUser = asyncHandeler(async (req, res, next) => {
     const { email, password } = req.body;
@@ -30,7 +31,8 @@ exports.loginUser = asyncHandeler(async (req, res, next) => {
     if (userModel == null) {
         token = await jwt.sign(tokenModel, process.env.ACCESS_TOKEN_KEY);
     }
-    res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=none; secure`]) 
+    const expirationTime = moment().add(1, 'day').toDate();
+    res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=none; Expires=${expirationTime.toUTCString()}; secure`]) 
     //res.cookie('token', `Bearer ${token}`);
     if (!user.verifiedEmail) {
         return res.status(402).json({
