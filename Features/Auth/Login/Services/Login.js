@@ -32,7 +32,7 @@ exports.loginUser = asyncHandeler(async (req, res, next) => {
         token = await jwt.sign(tokenModel, process.env.ACCESS_TOKEN_KEY);
     }
     const expirationTime = moment().add(1, 'day').toDate();
-    res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=lax; Expires=${expirationTime.toUTCString()}; secure`]) 
+    res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=lax;  Expires=${expirationTime.toUTCString()}; secure`]) 
     //res.cookie('token', `Bearer ${token}`);
     if (!user.verifiedEmail) {
         return res.status(402).json({
