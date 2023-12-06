@@ -51,6 +51,7 @@ exports.verifyEmail = async (req, res, next) => {
     res.setHeader('set-cookie',[`token=Bearer ${token}; samesite=none; secure`])  
     return res.status(200).json({
         "user": userTo,
+        token,
         appConfigs: configs,
     });
 }

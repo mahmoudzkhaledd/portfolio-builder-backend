@@ -14,10 +14,6 @@ const schema = new mongoose.Schema({
         unique: true,
         required: [true, "Email is required!"]
     },
-    phone: {
-        type: String,
-        required: [true, "Phone is required!"]
-    },
     password: {
         type: String,
         required: [true, "Password is required!"]
@@ -25,14 +21,6 @@ const schema = new mongoose.Schema({
     verifiedEmail: {
         type: Boolean,
         default: false,
-    },
-    gender: {
-        type: Boolean,
-        required: [true, "Gender is required!"]
-    },
-    country: {
-        type: String,
-        required: [true, "Country Date is required!"]
     },
     profilePic: String,
     shareTemp: {
