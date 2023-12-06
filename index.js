@@ -12,7 +12,8 @@ app.use(cors({
     
     origin: [
       "https://portfolio-builder-frontend.vercel.app",
-      'http://localhost:3000'
+      'http://localhost:3000',
+      'http://192.168.1.8:3000',
     ],
     credentials: true,
     exposedHeaders: ["set-cookie"],

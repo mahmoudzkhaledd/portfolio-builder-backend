@@ -9,7 +9,7 @@ exports.updateUserPortfolio = asyncHandeler(async (req, res, next) => {
         inner: components,
         toDelete: toDelete,
     } = req.body.chosen;
-    console.log({toDelete});
+
     const portId = req.params.id;
 
     if (portId == null) {

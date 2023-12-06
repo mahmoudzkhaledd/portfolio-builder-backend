@@ -13,7 +13,7 @@ exports.getTemplateComponents = asyncHandeler(async (req, res, next) => {
     if (port == null || port.userId != userModel.id) {
         return res.sendStatus(404);
     }
-    console.log(port.components.length)
+    
     const comps = await Component.find({ templateId: port.templateId });
     res.status(200).json({ components: comps, portfolio: port, });
 });
