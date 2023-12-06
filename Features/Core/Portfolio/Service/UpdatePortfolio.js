@@ -20,7 +20,7 @@ exports.updateUserPortfolio = asyncHandeler(async (req, res, next) => {
         return res.sendStatus(400);
     }
 
-    
+
     if (components.length + port.components.length - toDelete.length > 10) {
         return res.sendStatus(401);
     }
@@ -76,10 +76,10 @@ exports.updateUserPortfolio = asyncHandeler(async (req, res, next) => {
             portfolioId: port._id,
         });
     }
-    
-    
+
+
     for (let idx = 0; idx < port.components.length; idx++) {
-        
+
         if (toDelete.includes(port.components[idx]._id.toString())) {
             port.components.splice(idx, 1);
             idx--;
@@ -87,11 +87,22 @@ exports.updateUserPortfolio = asyncHandeler(async (req, res, next) => {
     }
 
     port.components.push(...portComps.map(obj => obj._id));
-    
-    
-    await port.save(); 
-     
+
+
+    await port.save();
+
     res.status(200).json({
         portComps: portComps || [],
+    })
+});
+exports.updateUserPortfolioState = asyncHandeler(async (req, res, next) => {
+    const userModel = res.locals.userModel;
+    const portId = req.params.id;
+    const { state } = req.body;
+
+    const port = await Portfolio.findOneAndUpdate({ _id: portId, userId: userModel.id, }, { online: state || false }, { new: true });
+
+    res.status(200).json({
+        port: port,
     })
 });
