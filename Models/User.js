@@ -20,7 +20,7 @@ const schema = new mongoose.Schema({
     },
     verifiedEmail: {
         type: Boolean,
-        default: false,
+        default: true,
     },
     profilePic: String,
     shareTemp: {

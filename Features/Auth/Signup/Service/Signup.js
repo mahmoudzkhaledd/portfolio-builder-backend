@@ -9,7 +9,6 @@ exports.signup = asyncHandeler(async (req, res, next) => {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const user = await User.create(req.body).catch((err) => {
         if (err.code === 11000) {
-
             res.status(409).send({ msg: 'User already exist!' });
             return null;
         }
