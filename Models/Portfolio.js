@@ -38,7 +38,17 @@ const schema = new mongoose.Schema({
     },
     components: [{
         type: mongoose.Schema.ObjectId,
-        ref:"PortfolioComponent"
+        ref: "PortfolioComponent"
+    }],
+    viewsHistory: [{
+        views: {
+            type: Number,
+            default: 0,
+        },
+        date: {
+            type: String,
+            default: "",
+        },
     }],
 }, { timestamps: true, });
 

@@ -1,5 +1,45 @@
 const asyncHandeler = require('express-async-handler');
 const Portfolio = require('../../../../Models/Portfolio');
+Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
+
+
+function numOfDate(firstDate, secondDate) {
+    const oneDay = 24 * 60 * 60 * 1000;
+    const diffDays = Math.floor(Math.abs((firstDate - new Date(secondDate)) / oneDay));
+    return diffDays
+}
+
+function addView(viewsHistory, initial) {
+    const dateNow = new Date();
+    if (viewsHistory.length == 0) {
+        for (let i = 0; i < 30; i++) {
+            const obj = {
+                views: 0,
+                date: dateNow.addDays(i - 29).toLocaleDateString()
+            };
+            viewsHistory.push(obj);
+        }
+        viewsHistory[viewsHistory.length - 1].views = initial;
+    } else if (dateNow.toLocaleDateString() == viewsHistory[viewsHistory.length - 1].date) {
+        viewsHistory[viewsHistory.length - 1].views++;
+    } else if (numOfDate(dateNow, viewsHistory[viewsHistory.length - 1].date) <= 30) {
+        const diff = numOfDate(dateNow, viewsHistory[viewsHistory.length - 1].date);
+        for (let i = 1; i <= diff; i++) {
+            const obj = {
+                views: 0,
+                date: dateNow.addDays(i - diff).toLocaleDateString()
+            };
+            viewsHistory.push(obj);
+        }
+        viewsHistory[viewsHistory.length - 1].views++;
+        viewsHistory.splice(0, diff);
+    }
+    return viewsHistory;
+}
 
 exports.getUserPortfolios = asyncHandeler(async (req, res, next) => {
     const userModel = res.locals.userModel;
@@ -14,7 +54,7 @@ exports.getUserPortfolios = asyncHandeler(async (req, res, next) => {
 exports.getPortfolio = asyncHandeler(async (req, res, next) => {
     const userModel = res.locals.userModel;
     const portId = req.params.id;
-    
+
     if (portId == null) {
         return res.sendStatus(404);
     }
@@ -25,11 +65,10 @@ exports.getPortfolio = asyncHandeler(async (req, res, next) => {
         return res.sendStatus(404);
     }
     if (userModel == null || port.userId != userModel.id) {
-        await port.updateOne({
-            $inc: {
-                totalViews: 1
-            },
-        })
+        port.totalViews++;
+        port.viewsHistory = port.viewsHistory || [];
+        port.viewsHistory = addView(port.viewsHistory, port.totalViews);
+        await port.save();
     }
     res.status(200).json({
         portfolio: port,
