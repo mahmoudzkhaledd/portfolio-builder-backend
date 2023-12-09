@@ -15,6 +15,7 @@ function numOfDate(firstDate, secondDate) {
 
 function addView(viewsHistory, increase) {
     const dateNow = new Date();
+    viewsHistory = viewsHistory || [];
     if (viewsHistory.length == 0) {
         for (let i = 0; i < 30; i++) {
             const obj = {
@@ -64,11 +65,12 @@ exports.getPortfolio = asyncHandeler(async (req, res, next) => {
     if (port == null || (userModel == null && !port.online) || (!port.online && userModel != null && userModel.id != port.userId)) {
         return res.sendStatus(404);
     }
-    port.viewsHistory = addView(port.viewsHistory, 0);
+
     if (userModel == null || port.userId != userModel.id) {
         port.totalViews++;
-        port.viewsHistory = port.viewsHistory || [];
         port.viewsHistory = addView(port.viewsHistory, port.viewsHistory.length == 0 ? port.totalViews : 1);
+    } else {
+        port.viewsHistory = addView(port.viewsHistory, 0);
     }
     await port.save();
     res.status(200).json({
