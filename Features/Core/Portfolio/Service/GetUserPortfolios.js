@@ -73,6 +73,15 @@ exports.getPortfolio = asyncHandeler(async (req, res, next) => {
         port.viewsHistory = addView(port.viewsHistory, 0);
     }
     await port.save();
+    if (userModel == null || port.userId != userModel.id) {
+        return res.status(200).json({
+            portfolio: {
+                _id: port._id,
+                displayName: port.displayName,
+                components: port.components,
+            },
+        });
+    }
     res.status(200).json({
         portfolio: port,
     })
